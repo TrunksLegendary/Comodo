@@ -1,0 +1,1 @@
+﻿Get-WmiObject -Class Win32_Product | Where-Object { $_.Vendor -like "*Microsoft Corporation*"} |Select Name, IdentifyingNumber, Version, InstallLocation 
