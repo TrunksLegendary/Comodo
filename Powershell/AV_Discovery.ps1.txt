@@ -9,3 +9,5 @@ $RemoveMacAfeeKapersky = (Get-ItemProperty HKLM:\Software\Microsoft\Windows\Curr
 $RemoveMacAfeeKapersky | Export-Csv -Path ($export_Path + "\InstalledProgs.csv")  -Append -NoTypeInformation
 
 # The output file is located in C:\Users\Public\InstalledProgs.csv
+
+Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -like "*Symantec*"} | Select Name, IdentifyingNumber, Version, InstallLocation

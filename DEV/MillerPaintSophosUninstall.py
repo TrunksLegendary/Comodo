@@ -2,62 +2,15 @@ from _winreg import *
 import subprocess
 import os, sys
 import ctypes
-import time
-import os
 
-#keyval=r'SOFTWARE\WOW6432Node\Sophos\SAVService\TamperProtection'
-#if not os.path.exists("keyval"):
-#    key = CreateKey(HKEY_LOCAL_MACHINE,keyval)
-#Registrykey= OpenKey(HKEY_LOCAL_MACHINE, keyval, 0,KEY_WRITE)
-#SetValueEx(Registrykey,"Enabled",0,REG_DWORD, 0)
-#CloseKey(Registrykey)
+keyval=r'SOFTWARE\WOW6432Node\Sophos\SAVService\TamperProtection'
+if not os.path.exists("keyval"):
+    key = CreateKey(HKEY_LOCAL_MACHINE,keyval)
+Registrykey= OpenKey(HKEY_LOCAL_MACHINE, keyval, 0,KEY_WRITE)
+SetValueEx(Registrykey,"Enabled",0,REG_DWORD, 0)
+CloseKey(Registrykey)
 
-class disable_file_system_redirection:
-    _disable = ctypes.windll.kernel32.Wow64DisableWow64FsRedirection
-    _revert = ctypes.windll.kernel32.Wow64RevertWow64FsRedirection
-    def __enter__(self):
-        self.old_value = ctypes.c_long()
-        self.success = self._disable(ctypes.byref(self.old_value))
-    def __exit__(self, type, value, traceback):
-        if self.success:
-            self._revert(self.old_value)
 
-def ExecuteCMD(CMD, RES = False):
-    import ctypes
-    class disable_file_system_redirection:
-        _disable = ctypes.windll.kernel32.Wow64DisableWow64FsRedirection
-        _revert = ctypes.windll.kernel32.Wow64RevertWow64FsRedirection
-        def __enter__(self):
-            self.old_value = ctypes.c_long()
-            self.success = self._disable(ctypes.byref(self.old_value))
-        def __exit__(self, type, value, traceback):
-            if self.success:
-                self._revert(self.old_value)
-
-    from subprocess import PIPE, Popen
-    with disable_file_system_redirection():
-        OBJ = Popen(CMD, shell = True, stdout = PIPE, stderr = PIPE)
-        OBJ.wait()
-    out, err = OBJ.communicate()
-    print out
-    print err
-    RET = OBJ.returncode
-    if RET == 0:
-        if RES == True:
-            if out:
-                return out.strip()
-            else:
-                return True
-        else:
-            return True
-    else:
-        if RES == True:
-            if err:
-                return err.strip()
-            else:
-                return False
-        else:
-            return False
 
 ExecuteCMD('net stop "Sophos Anti-Virus status reporter"')
 ExecuteCMD('net stop "Sophos AutoUpdate Service"')
@@ -101,20 +54,14 @@ NAM.append('Sophos Remote Management System')
 CMD.append('MsiExec.exe /X{FED1005D-CBC8-45D5-A288-FFC7BB304121} /qn /norestart /L*V "c:\Windows\Temp\Uninstall_SophosRemoteManagementSystem.log"')
 NAM.append('Sophos AutoUpdate')
 CMD.append('MsiExec.exe /X{AFBCA1B9-496C-4AE6-98AE-3EA1CFF65C54} /qn /norestart /L*V "c:\Windows\Temp\Uninstall_SophosAutoUpdate.log"') 
+NAM.append('Sophos EndPoint Defense')
+CMD.append('c:\Program Files\Sophos\Endpoint Defense\uninstall.exe') 
 
-x=0
-for i in CMD:
-    print "Uninstallting " + NAM[x]
-    process = ExecuteCMD(i)
-    if process :
-        print "Uninstallation  Successfull"
-    else:
-        print "Please run this script Again"
-    print NAM[x] + " is not installed"
-    x+=1
-
-
-from subprocess import PIPE, Popen
+path=r'\\ts-srv-01\ITinstalls$\InstallAdobeReader\InstallAdobeReaderOffline.ps1' #Define Powershell file path
+CMD='PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& "%s""'%(path)
+import os
+import ctypes
+import subprocess
 class disable_file_system_redirection:
     _disable = ctypes.windll.kernel32.Wow64DisableWow64FsRedirection
     _revert = ctypes.windll.kernel32.Wow64RevertWow64FsRedirection
@@ -124,12 +71,19 @@ class disable_file_system_redirection:
     def __exit__(self, type, value, traceback):
         if self.success:
             self._revert(self.old_value)
-
 with disable_file_system_redirection():
-    Popen('c:\Program Files\Sophos\Endpoint Defense\uninstall.exe', shell = True, stdout = PIPE, stderr = PIPE)
-    time.sleep(2)
-    Popen('rmdir "c:\Program Files\Sophos" /s /q', shell = True, stdout = PIPE, stderr = PIPE)
-    time.sleep(2)
-    Popen('rmdir "c:\ProgramData\Sophos" /s /q', shell = True, stdout = PIPE, stderr = PIPE)
-    time.sleep(2)
-    Popen('rmdir "c:\Program Files (x86)\Sophos" /s /q', shell = True, stdout = PIPE, stderr = PIPE)
+    x = 0 
+    for i in CMD:
+        print "Uninstallting " + NAM[x]
+        ping = subprocess.Popen(i,stdout=subprocess.PIPE,stderr = subprocess.PIPE,shell=True)
+        if ping :
+            print "Uninstallation  Successfull"
+            out = ping.communicate()[0]
+            output = str(out)
+            print output
+        else:
+            print "Please run this script Again"
+        print NAM[x] + " is not installed"
+        x+=1
+        print"Powershell file executed successfully"
+

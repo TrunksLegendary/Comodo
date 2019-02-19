@@ -2,15 +2,13 @@ from _winreg import *
 import subprocess
 import os, sys
 import ctypes
-import time
-import os
 
-#keyval=r'SOFTWARE\WOW6432Node\Sophos\SAVService\TamperProtection'
-#if not os.path.exists("keyval"):
-#    key = CreateKey(HKEY_LOCAL_MACHINE,keyval)
-#Registrykey= OpenKey(HKEY_LOCAL_MACHINE, keyval, 0,KEY_WRITE)
-#SetValueEx(Registrykey,"Enabled",0,REG_DWORD, 0)
-#CloseKey(Registrykey)
+keyval=r'SOFTWARE\WOW6432Node\Sophos\SAVService\TamperProtection'
+if not os.path.exists("keyval"):
+    key = CreateKey(HKEY_LOCAL_MACHINE,keyval)
+Registrykey= OpenKey(HKEY_LOCAL_MACHINE, keyval, 0,KEY_WRITE)
+SetValueEx(Registrykey,"Enabled",0,REG_DWORD, 0)
+CloseKey(Registrykey)
 
 class disable_file_system_redirection:
     _disable = ctypes.windll.kernel32.Wow64DisableWow64FsRedirection
@@ -101,6 +99,9 @@ NAM.append('Sophos Remote Management System')
 CMD.append('MsiExec.exe /X{FED1005D-CBC8-45D5-A288-FFC7BB304121} /qn /norestart /L*V "c:\Windows\Temp\Uninstall_SophosRemoteManagementSystem.log"')
 NAM.append('Sophos AutoUpdate')
 CMD.append('MsiExec.exe /X{AFBCA1B9-496C-4AE6-98AE-3EA1CFF65C54} /qn /norestart /L*V "c:\Windows\Temp\Uninstall_SophosAutoUpdate.log"') 
+NAM.append('Sophos EndPoint Defense')
+CMD.append('c:\Program Files\Sophos\Endpoint Defense\uninstall.exe') 
+
 
 x=0
 for i in CMD:
@@ -113,23 +114,5 @@ for i in CMD:
     print NAM[x] + " is not installed"
     x+=1
 
-
-from subprocess import PIPE, Popen
-class disable_file_system_redirection:
-    _disable = ctypes.windll.kernel32.Wow64DisableWow64FsRedirection
-    _revert = ctypes.windll.kernel32.Wow64RevertWow64FsRedirection
-    def __enter__(self):
-        self.old_value = ctypes.c_long()
-        self.success = self._disable(ctypes.byref(self.old_value))
-    def __exit__(self, type, value, traceback):
-        if self.success:
-            self._revert(self.old_value)
-
 with disable_file_system_redirection():
-    Popen('c:\Program Files\Sophos\Endpoint Defense\uninstall.exe', shell = True, stdout = PIPE, stderr = PIPE)
-    time.sleep(2)
-    Popen('rmdir "c:\Program Files\Sophos" /s /q', shell = True, stdout = PIPE, stderr = PIPE)
-    time.sleep(2)
-    Popen('rmdir "c:\ProgramData\Sophos" /s /q', shell = True, stdout = PIPE, stderr = PIPE)
-    time.sleep(2)
-    Popen('rmdir "c:\Program Files (x86)\Sophos" /s /q', shell = True, stdout = PIPE, stderr = PIPE)
+    os.system('c:\Program Files\Sophos\Endpoint Defense\uninstall.exe')

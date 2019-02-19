@@ -1,0 +1,30 @@
+Get-WmiObject -Class Win32_Product | Where-Object { $_.Vendor -like "*comodo*"} |Select Name, IdentifyingNumber, InstallLocation 
+
+$DataStamp = get-date -Format yyyyMMddTHHmmss
+$logFile = '{0}-{1}.log' -f $file.fullname,$DataStamp
+$MSIArguments = @(
+    "/X{337F2FA0-0AB9-4605-9B83-9640E59BB3AC}"
+    ('"{0}"' -f $file.fullname)
+    "/qn"
+    "/norestart"
+    "/L*v"
+    $logFile
+)
+Start-Process "msiexec.exe" -ArgumentList $MSIArguments -Wait -NoNewWindow 
+
+
+# Original
+Get-WmiObject -Class Win32_Product | Where-Object { $_.Vendor -like "*comodo*"} |Select Name, IdentifyingNumber, InstallLocation 
+
+$DataStamp = get-date -Format yyyyMMddTHHmmss
+$logFile = '{0}-{1}.log' -f $file.fullname,$DataStamp
+$MSIArguments = @(
+    "/i"
+    ('"{0}"' -f $file.fullname)
+    "/qn"
+    "/norestart"
+    "/L*v"
+    $logFile
+)
+Start-Process "msiexec.exe" -ArgumentList $MSIArguments -Wait -NoNewWindow 
+

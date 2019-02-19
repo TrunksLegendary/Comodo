@@ -5,12 +5,12 @@ import ctypes
 import time
 import os
 
-#keyval=r'SOFTWARE\WOW6432Node\Sophos\SAVService\TamperProtection'
-#if not os.path.exists("keyval"):
-#    key = CreateKey(HKEY_LOCAL_MACHINE,keyval)
-#Registrykey= OpenKey(HKEY_LOCAL_MACHINE, keyval, 0,KEY_WRITE)
-#SetValueEx(Registrykey,"Enabled",0,REG_DWORD, 0)
-#CloseKey(Registrykey)
+keyval=r'SOFTWARE\WOW6432Node\Sophos\SAVService\TamperProtection'
+if not os.path.exists("keyval"):
+    key = CreateKey(HKEY_LOCAL_MACHINE,keyval)
+Registrykey= OpenKey(HKEY_LOCAL_MACHINE, keyval, 0,KEY_WRITE)
+SetValueEx(Registrykey,"Enabled",0,REG_DWORD, 0)
+CloseKey(Registrykey)
 
 class disable_file_system_redirection:
     _disable = ctypes.windll.kernel32.Wow64DisableWow64FsRedirection
@@ -85,14 +85,14 @@ ExecuteCMD('net stop "Sophos Web Intelligence Update"')
 
 CMD = []
 NAM = []
-#NAM.append('Sophos Patch Agent') 
-#CMD.append('MsiExec.exe /X{5565E71F-091B-42B8-8514-7E8944860BFD} /qn /norestart /L*V "c:\Windows\Temp\Uninstall_SophosPatchAgent.log"')
-#NAM.append('Sophos Network Threat Protection') 
-#CMD.append('MsiExec.exe /X{66967E5F-43E8-4402-87A4-04685EE5C2CB} /qn /norestart /L*V "c:\Windows\Temp\Uninstall_Sophos NetworkThreatProtection.log"') 
-#NAM.append('Sophos Client Firewall')
-#CMD.append('MsiExec.exe /X{A805FB2A-A844-4cba-8088-CA64087D59E1} /qn /norestart /L*V "c:\Windows\Temp\Uninstall_SophosClientFirewall.log"') 
-#NAM.append('Sophos Update Manager')
-#CMD.append('MsiExec.exe /X{2C7A82DB-69BC-4198-AC26-BB862F1BE4D0} /qn /norestart /L*V "c:\Windows\Temp\Uninstall_SophosUpdateManager.log"') 
+NAM.append('Sophos Patch Agent') 
+CMD.append('MsiExec.exe /X{5565E71F-091B-42B8-8514-7E8944860BFD} /qn /norestart /L*V "c:\Windows\Temp\Uninstall_SophosPatchAgent.log"')
+NAM.append('Sophos Network Threat Protection') 
+CMD.append('MsiExec.exe /X{66967E5F-43E8-4402-87A4-04685EE5C2CB} /qn /norestart /L*V "c:\Windows\Temp\Uninstall_Sophos NetworkThreatProtection.log"') 
+NAM.append('Sophos Client Firewall')
+CMD.append('MsiExec.exe /X{A805FB2A-A844-4cba-8088-CA64087D59E1} /qn /norestart /L*V "c:\Windows\Temp\Uninstall_SophosClientFirewall.log"') 
+NAM.append('Sophos Update Manager')
+CMD.append('MsiExec.exe /X{2C7A82DB-69BC-4198-AC26-BB862F1BE4D0} /qn /norestart /L*V "c:\Windows\Temp\Uninstall_SophosUpdateManager.log"') 
 NAM.append('Sophos System Protection') 
 CMD.append('MsiExec.exe /X{1093B57D-A613-47F3-90CF-0FD5C5DCFFE6} /qn /norestart /L*V "c:\Windows\Temp\Uninstall_SophosSystemProtection.log"') 
 NAM.append('Sophos Anti-Virus')
@@ -104,7 +104,7 @@ CMD.append('MsiExec.exe /X{AFBCA1B9-496C-4AE6-98AE-3EA1CFF65C54} /qn /norestart 
 
 x=0
 for i in CMD:
-    print "Uninstallting " + NAM[x]
+    print "Uninstallting " + NAM[x] + CMD[x]
     process = ExecuteCMD(i)
     if process :
         print "Uninstallation  Successfull"

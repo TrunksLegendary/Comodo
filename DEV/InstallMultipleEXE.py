@@ -41,13 +41,13 @@ def ExecuteCMD(CMD, RES = False):
 # Below enter paths to your executables
 #
 ############################################################
+path1=r'\\ts-srv-01.twinstar.local\ITInstalls$\InstallAdobeReader\installAdobeOffline.ps1' #Define Powershell file path
+path2=r'\\ts-srv-01.twinstar.local\ITInstalls$\InstallChrome\InstallChrome.ps1' #Define Powershell file path
 
 CMD = []
-CMD.append("path and filename of executable 1")
-CMD.append("path and filename of executable 2")
-CMD.append("path and filename of executable 3")
-# EXAMPLE1: CMD.append('MsiExec.exe \\server\path\path2\myMSI.msi /qn REBOOT=ReallySuppress  /L*V "c:\\windows\\temp\\LogFile.log"')
-# EXAMPLE2: CMD.append('\\server\path\path2\myEXE.exe /myswitches')
+
+CMD.append('PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& "%s""'%(path1))
+CMD.append('PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& "%s""'%(path2))
 
 x=0
 for i in CMD:

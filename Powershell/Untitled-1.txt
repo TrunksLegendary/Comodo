@@ -1,0 +1,83 @@
+# Remove Sophos and stop and remove all services.
+
+sc config savservice start= disabled
+sc stop savservice
+sc delete savservice
+sc config savadminservice start= disabled
+sc stop savadminservice
+sc delete savadminservice
+sc config "Sophos AutoUpdate Service" start= disabled
+sc stop "Sophos AutoUpdate Service"
+sc delete "Sophos AutoUpdate Service"
+sc config "sophos device control service" start= disabled
+sc stop "sophos device control service"
+sc delete "sophos device control service"
+sc config "sophos web control service" start= disabled
+sc stop "sophos web control service"
+sc delete "sophos web control service"
+sc config swi_filter start= disabled
+sc stop swi_filter
+sc delete swi_filter
+sc config swi_service start= disabled
+sc stop swi_service
+sc delete swi_service
+sc config "Sophos Clean Service" start= disabled
+sc stop "Sophos Clean Service"
+sc delete "Sophos Clean Service"
+sc config "Sophos File Scanner Service" start= disabled
+sc stop "Sophos File Scanner Service"
+sc delete "Sophos File Scanner Service"
+sc config "Sophos Health Service" start= disabled
+sc stop "Sophos Health Service"
+sc delete "Sophos Health Service"
+sc config "Sophos MCS Agent" start= disabled
+sc stop "Sophos MCS Agent"
+sc delete "Sophos MCS Agent"
+sc config "Sophos MCS Client" start= disabled
+sc stop "Sophos MCS Client"
+sc delete "Sophos MCS Client"
+sc config "SntpService" start= disabled
+sc stop "SntpService"
+sc delete "SntpService"
+sc config "Sophos Safestore Service" start= disabled
+sc stop "Sophos Safestore Service"
+sc delete "Sophos Safestore Service"
+sc config "Sophos System Protection Service" start= disabled
+sc stop "Sophos System Protection Service"
+sc delete "Sophos System Protection Service"
+
+ 
+
+Remove Registry - To delete all registry keys (that I could find anyway...)
+
+reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Sophos Clean" /f
+reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Sophos Endpoint Agent" /f
+reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Sophos Endpoint Defense" /f
+reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Sophos Standalone Engine" /f
+reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{2831282D-8519-4910-B339-2302840ABEF3}" /f
+reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{604350BF-BE9A-4F79-B0EB-B1C22D889E2D}" /f
+reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{BB36D9C2-6AE5-4AB2-BC91-ECD247092BD8}" /f
+reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{CD39E739-F480-4AC4-B0C9-68CA731D8AC6}" /f
+reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{D29542AE-287C-42E4-AB28-3858E13C1A3E}" /f
+reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{2C14E1A2-C4EB-466E-8374-81286D723D3A}" /f
+reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{4627F5A1-E85A-4394-9DB3-875DF83AF6C2}" /f
+reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{6654537D-935E-41C0-A18A-C55C2BF77B7E}" /f
+reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{72E136F7-3751-422E-AC7A-1B2E46391909}" /f
+reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{E44AF5E6-7D11-4BDF-BEA8-AA7AE5FE6745}" /f
+reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Sophos" /f
+reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Sophos" /f
+
+ 
+
+Remove Directories - I had some problems with some directories so I threw in some cmds to take ownership to help. Oft times there will still be some dll's leftover in the Program Files (x86) directory so it may not be a silver bullet.
+
+rmdir /s /q "C:\Program Files\Sophos"
+
+takeown /f "C:\Program Files (x86)\Sophos" /a /r /d y
+
+rmdir /s /q "C:\Program Files (x86)\Sophos"
+rmdir /s /q "C:\Program Files\Common Files\Sophos"
+
+takeown /f C:\ProgramData\Sophos\ /a /r /d y
+
+cmd /k rmdir /s /q C:\ProgramData\Sophos\

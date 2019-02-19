@@ -13,3 +13,6 @@ $UninstallInfo = (Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersi
 $UninstallInfo | Export-Csv -Path ($export_Path + "\InstalledProgs.csv")  -Append -NoTypeInformation
 
 # The output file is located in C:\Users\Public\InstalledProgs.csv
+
+Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName, UninstallString | Where-Object { $_.Name -like "*sophos*"}
+ | Export-Csv -Path ($export_Path + "\InstalledProgs.csv")  -Append -NoTypeInformation

@@ -13,10 +13,5 @@ class disable_file_system_redirection:
             self._revert(self.old_value)
 
 with disable_file_system_redirection():
-    Popen('c:\Program Files\Sophos\Endpoint Defense\uninstall.exe', shell = True, stdout = PIPE, stderr = PIPE)
-    time.sleep(2)
-    Popen('rmdir "c:\Program Files\Sophos" /s /q', shell = True, stdout = PIPE, stderr = PIPE)
-    time.sleep(2)
-    Popen('rmdir "c:\ProgramData\Sophos" /s /q', shell = True, stdout = PIPE, stderr = PIPE)
-    time.sleep(2)
-    Popen('rmdir "c:\Program Files (x86)\Sophos" /s /q', shell = True, stdout = PIPE, stderr = PIPE)
+    Popen('"C:\Program Files\COMODO\COMODO Internet Security\cfpconfg.exe" --xcfgExport="C:\Settings.xml" --filter=', shell = True, stdout = PIPE, stderr = PIPE)
+    time.sleep(5)
